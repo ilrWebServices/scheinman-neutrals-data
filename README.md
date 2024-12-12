@@ -1,1 +1,43 @@
-# scheinman-neutrals-data
+# Scheinman Neutrals Data for Migration
+
+This data was generated from the D7 site via the following query:
+
+```sql
+select n.nid, n.vid, n.uid, n.title, n.created as n_created, n.changed as n_changed,
+  u.name as username, u.mail as usermail, u.created as u_created, u.changed as u_changed, u.access as u_access,
+  fm.field_email_email as email,
+  fjt.field_job_title_value as job_title,
+  fp.field_phone_value as phone,
+  ff.field_fax_value as fax,
+  group_concat(fw.field_website_url_url separator ';') as websites,
+  fwh.field_professional_work_history__value as prof_work_history,
+  fdre.field_dispute_resolution_experie_value as dispute_resolution_experience,
+  fdrt.field_dispute_resolution_trainin_value as dispute_resolution_training,
+  fdra.field_additional_dispute_resolut_value as dispute_resolution_additional,
+  fpa.field_professional_associations_value as professional_associations,
+  fe.field_education_value as education,
+  fr.field_references_value as `references`,
+  ffp.field_fee_policy_value as fee_policy,
+  replace(file_image.uri, "public://", "https://www.ilr.cornell.edu/sites/default/files/") as image_uri
+from node n
+inner join users u on n.uid = u.uid
+left join field_data_field_email fm on n.nid = fm.entity_id and n.vid = fm.revision_id
+left join field_data_field_job_title fjt on n.nid = fjt.entity_id and n.vid = fjt.revision_id
+left join field_data_field_phone fp on n.nid = fp.entity_id and n.vid = fp.revision_id
+left join field_data_field_fax ff on n.nid = ff.entity_id and n.vid = ff.revision_id
+left join field_data_field_website_url fw on n.nid = fw.entity_id and n.vid = fw.revision_id
+left join field_data_field_professional_work_history_ fwh on n.nid = fwh.entity_id and n.vid = fwh.revision_id
+left join field_data_field_dispute_resolution_experie fdre on n.nid = fdre.entity_id and n.vid = fdre.revision_id
+left join field_data_field_dispute_resolution_trainin fdrt on n.nid = fdrt.entity_id and n.vid = fdrt.revision_id
+left join field_data_field_additional_dispute_resolut fdra on n.nid = fdra.entity_id and n.vid = fdra.revision_id
+left join field_data_field_professional_associations fpa on n.nid = fpa.entity_id and n.vid = fpa.revision_id
+left join field_data_field_education fe on n.nid = fe.entity_id and n.vid = fe.revision_id
+left join field_data_field_references fr on n.nid = fr.entity_id and n.vid = fr.revision_id
+left join field_data_field_fee_policy ffp on n.nid = ffp.entity_id and n.vid = ffp.revision_id
+left join field_data_field_profile_image fi on n.nid = fi.entity_id and n.vid = fi.revision_id
+left join file_managed file_image on fi.field_profile_image_fid = file_image.fid
+where n.type = 'scheinman_neutral'
+  and n.status = 1
+group by n.nid
+order by n.title;
+```
