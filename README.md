@@ -5,10 +5,21 @@ This data was generated from the D7 site via the following query:
 ```sql
 select n.nid, n.vid, n.uid, n.title, n.created as n_created, n.changed as n_changed,
   u.name as username, u.mail as usermail, u.created as u_created, u.changed as u_changed, u.access as u_access,
+  fname.field_first_name_value as fname,
+  lname.field_last_name_value as lname,
+  mname.field_middle_name_value as mname,
+  namet.field_name_title_value as name_title,
+  namesuf.field_suffix_value as name_suffix,
+  c.field_company_value as company,
   fm.field_email_email as email,
   fjt.field_job_title_value as job_title,
   fp.field_phone_value as phone,
   ff.field_fax_value as fax,
+  addy1.field_address_line_1_value as addr_1,
+  addy2.field_address_line_2_value as addr_2,
+  city.field_city_value as city,
+  st.field_state_inc_outside_us_value as state,
+  zip.field_zip_code_value as zip,
   group_concat(fw.field_website_url_url separator ';') as websites,
   fwh.field_professional_work_history__value as prof_work_history,
   fdre.field_dispute_resolution_experie_value as dispute_resolution_experience,
@@ -22,6 +33,20 @@ select n.nid, n.vid, n.uid, n.title, n.created as n_created, n.changed as n_chan
 from node n
 inner join users u on n.uid = u.uid
 left join field_data_field_email fm on n.nid = fm.entity_id and n.vid = fm.revision_id
+
+left join field_data_field_first_name fname on n.nid = fname.entity_id and n.vid = fname.revision_id
+left join field_data_field_last_name lname on n.nid = lname.entity_id and n.vid = lname.revision_id
+left join field_data_field_middle_name mname on n.nid = mname.entity_id and n.vid = mname.revision_id
+left join field_data_field_name_title namet on n.nid = namet.entity_id and n.vid = namet.revision_id
+left join field_data_field_suffix namesuf on n.nid = namesuf.entity_id and n.vid = namesuf.revision_id
+left join field_data_field_company c on n.nid = c.entity_id and n.vid = c.revision_id
+
+left join field_data_field_address_line_1 addy1 on n.nid = addy1.entity_id and n.vid = addy1.revision_id
+left join field_data_field_address_line_2 addy2 on n.nid = addy2.entity_id and n.vid = addy2.revision_id
+left join field_data_field_city city on n.nid = city.entity_id and n.vid = city.revision_id
+left join field_data_field_state_inc_outside_us st on n.nid = st.entity_id and n.vid = st.revision_id
+left join field_data_field_zip_code zip on n.nid = zip.entity_id and n.vid = zip.revision_id
+
 left join field_data_field_job_title fjt on n.nid = fjt.entity_id and n.vid = fjt.revision_id
 left join field_data_field_phone fp on n.nid = fp.entity_id and n.vid = fp.revision_id
 left join field_data_field_fax ff on n.nid = ff.entity_id and n.vid = ff.revision_id
