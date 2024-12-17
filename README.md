@@ -1,10 +1,18 @@
 # Scheinman Neutrals Data for Migration
 
-This data was generated from the D7 site via the following query:
+This data was generated from the D7 site via the following queries:
+
+```sql
+select 
+  u.uid, u.name, u.pass, u.mail, u.created, u.access, u.login, u.timezone, u.init, u.changed
+from users u
+where u.uid in (
+  select distinct uid from node where type = 'scheinman_neutral'
+);
+```
 
 ```sql
 select n.nid, n.vid, n.uid, n.title, n.created as n_created, n.changed as n_changed,
-  u.name as username, u.mail as usermail, u.created as u_created, u.changed as u_changed, u.access as u_access,
   fname.field_first_name_value as fname,
   lname.field_last_name_value as lname,
   mname.field_middle_name_value as mname,
@@ -31,7 +39,6 @@ select n.nid, n.vid, n.uid, n.title, n.created as n_created, n.changed as n_chan
   ffp.field_fee_policy_value as fee_policy,
   replace(file_image.uri, "public://", "https://www.ilr.cornell.edu/sites/default/files/") as image_uri
 from node n
-inner join users u on n.uid = u.uid
 left join field_data_field_email fm on n.nid = fm.entity_id and n.vid = fm.revision_id
 
 left join field_data_field_first_name fname on n.nid = fname.entity_id and n.vid = fname.revision_id
